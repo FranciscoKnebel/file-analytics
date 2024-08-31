@@ -2,11 +2,16 @@ const core = require("@actions/core");
 const { filesize } = require("filesize");
 
 const path = require("path");
+const fs = require("fs");
 const colors = require("picocolors");
 
 module.exports = {
   generateOutput_json(output) {
-    core.setOutput('file_json', JSON.stringify(output, undefined, 4));
+    const outputJSON = core.getInput('output_json');
+
+    if (outputJSON !== 'false') {
+      fs.writeFileSync(outputJSON, JSON.stringify(output, undefined, 4));
+    }
   },
   
   generateOutput_text(output) {
@@ -21,7 +26,7 @@ module.exports = {
     return output.forEach(({ relative, sizeJedec, mtimeLocale }) => {
       const dir = path.dirname(relative);
       const base = path.basename(relative);
-      
+
       const size = colors.bold(sizeJedec);
       const time = colors.italic(mtimeLocale);
   

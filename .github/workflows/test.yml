@@ -14,9 +14,7 @@ jobs:
         uses: ./  # Uses the action in the root of the repository
         with:
           files: "sample/file*"
-      
-      - name: Save output to file
-        run: echo "${{ steps.run.outputs.file_json }}" > file_info.json
+          output_json: file_info.json
       
       - name: Output to table
         id: create_table

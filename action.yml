@@ -9,6 +9,9 @@ inputs:
   follow-symbolic-links:
     description: 'Indicates whether to follow symbolic links'
     default: true
+  output_json:
+    description: 'Indicates to output the metadata as JSON to this file'
+    default: 'false'
 
 outputs:
   file_json:
