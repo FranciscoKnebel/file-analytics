@@ -18,6 +18,10 @@ outputs:
     description: 'File metadata in JSON format'
   file_info:
     description: 'File metadata in text format'
+  file_size:
+    description: 'Total file size'
+  file_count:
+    description: 'Total file count'
 
 runs:
   using: 'node20'

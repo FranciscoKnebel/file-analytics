@@ -41,5 +41,8 @@ module.exports = {
     core.info(`Total files: ${colors.bold(output.length)}`);
     core.info(`Total size (bytes): ${colors.bold(totalSize)}`);
     core.info(`Total size (jedec): ${colors.bold(totalSizeJedec)}`);
+
+    core.setOutput('file_count', output.length);
+    core.setOutput('file_size', totalSizeJedec);
   }
 }
