@@ -21,8 +21,7 @@ jobs:
         uses: gazab/create-markdown-table@v1
         with:
           file: file_info.json
-          capitalize: false
-          columns: '["relative", "size", "mtime"]'
+          columns: '["file", "size", "ext", "mtime"]'
 
       - name: Output Markdown to Action Summary
         run: echo "${{ steps.create_table.outputs.table }}" >> $GITHUB_STEP_SUMMARY
