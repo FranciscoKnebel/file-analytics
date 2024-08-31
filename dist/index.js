@@ -27499,12 +27499,15 @@ const colors = __nccwpck_require__(7023);
 module.exports = {
   generateOutput_json(output) {
     const outputJSON = core.getInput('output_json');
+    const json = JSON.stringify(output, undefined, 4);
 
     if (outputJSON && outputJSON !== 'false') {
       core.debug(`Writing output to JSON in file "${outputJSON}"`);
-      fs.writeFileSync(outputJSON, JSON.stringify(output, undefined, 4));
+      fs.writeFileSync(outputJSON, json);
       core.info(`Wrote output to JSON in file "${outputJSON}"`);
     }
+
+    core.setOutput('file_output', json);
   },
   
   generateOutput_text(output) {

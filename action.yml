@@ -1,5 +1,5 @@
 name: 'File Analytics'
-description: 'An action to get file size and date from a blob of files'
+description: 'An action to get file size and date from a glob of files'
 author: 'Francisco Knebel'
 
 inputs:
@@ -14,7 +14,7 @@ inputs:
     default: 'false'
 
 outputs:
-  file_json:
+  file_output:
     description: 'File metadata in JSON format'
   file_info:
     description: 'File metadata in text format'
