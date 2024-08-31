@@ -26,14 +26,16 @@ module.exports = {
 
         const out = {
           ...path.parse(file),
-          file,
-          relative: path.relative(process.cwd(), file),
-          size: stats.size,
-          sizeJedec: filesize(stats.size, { standard: 'jedec' }),
+          full: file,
+          file: path.relative(process.cwd(), file),
+          size: filesize(stats.size, { standard: 'jedec' }),
+          sizeBytes: stats.size,
           mtime: stats.mtime,
-          mtimeLocale: stats.mtime.toLocaleDateString(),
+          mtimeISO: stats.mtime.toISOString(),
+          mtimeUTC: stats.mtime.toUTCString(),
           ctime: stats.ctime,
-          ctimeLocale: stats.ctime.toLocaleDateString()
+          ctimeISO: stats.ctime.toISOString(),
+          ctimeUTC: stats.ctime.toUTCString()
         };
 
         core.debug(out);

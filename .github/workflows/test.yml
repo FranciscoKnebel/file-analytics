@@ -9,17 +9,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Run custom action
+      - name: Run File Analytics action
         id: run
         uses: ./  # Uses the action in the root of the repository
         with:
           files: "sample/file*"
           output_json: file_info.json
       
-      - name: Output to table
+      - name: Generate Markdown table
         id: create_table
         uses: gazab/create-markdown-table@v1
         with:
           file: file_info.json
+          capitalize: false
+          columns: '["relative", "size", "mtime"]'
 
-      - run: echo ${{ steps.create_table.outputs.table }}
+      - name: Output Markdown to Action Summary
+        run: echo "${{ steps.create_table.outputs.table }}" >> $GITHUB_STEP_SUMMARY

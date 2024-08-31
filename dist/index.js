@@ -27493,39 +27493,41 @@ const core = __nccwpck_require__(2186);
 const { filesize } = __nccwpck_require__(4948);
 
 const path = __nccwpck_require__(1017);
+const fs = __nccwpck_require__(7147);
 const colors = __nccwpck_require__(7023);
 
 module.exports = {
   generateOutput_json(output) {
-    core.setOutput('file_json', JSON.stringify(output, undefined, 4));
+    const outputJSON = core.getInput('output_json');
+
+    if (outputJSON && outputJSON !== 'false') {
+      core.debug(`Writing output to JSON in file "${outputJSON}"`);
+      fs.writeFileSync(outputJSON, JSON.stringify(output, undefined, 4));
+      core.info(`Wrote output to JSON in file "${outputJSON}"`);
+    }
   },
   
   generateOutput_text(output) {
-    core.setOutput('file_info', output.map(({ file, sizeJedec, mtimeLocale }) => {
-      const { dir, base } = path.parse(file);
-  
-      return `${(dir ? `${dir}` : '') + base}\t${sizeJedec}\t${mtimeLocale}`;
+    core.setOutput('file_info', output.map(({ file, size, mtimeISO }) => {
+      return `${file}\t${size}\t${mtimeISO}`;
     }));
   },
   
   generateOutput_log(output) {
-    return output.forEach(({ relative, sizeJedec, mtimeLocale }) => {
-      const dir = path.dirname(relative);
-      const base = path.basename(relative);
-      
-      const size = colors.bold(sizeJedec);
-      const time = colors.italic(mtimeLocale);
+    return output.forEach(({ file, size, mtimeISO }) => {
+      const dir = path.dirname(file);
+      const base = path.basename(file);
   
-      core.info(`${(dir ? `${colors.dim(dir)}${path.sep}` : '') + `${colors.green(base)}`}\t${size}\t${time}`);
+      core.info(`${(dir ? `${colors.dim(dir)}${path.sep}` : '') + `${colors.green(base)}`}\t${colors.bold(size)}\t${colors.italic(mtimeISO)}`);
     });
   },
   
   generateOutput_summary(output) {
-    const totalSize = output.reduce((acc, { size }) => acc + size, 0);
+    const totalSize = output.reduce((acc, { sizeBytes }) => acc + sizeBytes, 0);
     const totalSizeJedec = filesize(totalSize, { standard: 'jedec' });
   
     core.info(`Total files: ${colors.bold(output.length)}`);
-    core.info(`Total size: ${colors.bold(totalSize)}`);
+    core.info(`Total size (bytes): ${colors.bold(totalSize)}`);
     core.info(`Total size (jedec): ${colors.bold(totalSizeJedec)}`);
   }
 }
@@ -27594,14 +27596,16 @@ module.exports = {
 
         const out = {
           ...path.parse(file),
-          file,
-          relative: path.relative(process.cwd(), file),
-          size: stats.size,
-          sizeJedec: filesize(stats.size, { standard: 'jedec' }),
+          full: file,
+          file: path.relative(process.cwd(), file),
+          size: filesize(stats.size, { standard: 'jedec' }),
+          sizeBytes: stats.size,
           mtime: stats.mtime,
-          mtimeLocale: stats.mtime.toLocaleDateString(),
+          mtimeISO: stats.mtime.toISOString(),
+          mtimeUTC: stats.mtime.toUTCString(),
           ctime: stats.ctime,
-          ctimeLocale: stats.ctime.toLocaleDateString()
+          ctimeISO: stats.ctime.toISOString(),
+          ctimeUTC: stats.ctime.toUTCString()
         };
 
         core.debug(out);
