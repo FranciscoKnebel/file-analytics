@@ -1,0 +1,25 @@
+name: 'File Analytics'
+description: 'An action to get file size and date from a blob of files'
+author: 'Francisco Knebel'
+
+inputs:
+  files:
+    description: 'File pattern to get metadata from'
+    required: true
+  follow-symbolic-links:
+    description: 'Indicates whether to follow symbolic links'
+    default: true
+
+outputs:
+  file_json:
+    description: 'File metadata in JSON format'
+  file_info:
+    description: 'File metadata in text format'
+
+runs:
+  using: 'node20'
+  main: 'index.js'
+
+branding:
+  icon: 'file'
+  color: 'blue'

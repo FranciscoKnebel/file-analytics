@@ -1,0 +1,27 @@
+name: Test Action
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run custom action
+        id: run
+        uses: ./  # Uses the action in the root of the repository
+        with:
+          files: "sample/file*"
+      
+      - name: Save output to file
+        run: echo "${{ steps.run.outputs.file_json }}" > file_info.json
+      
+      - name: Output to table
+        id: create_table
+        uses: gazab/create-markdown-table@v1
+        with:
+          file: file_info.json
+
+      - run: echo ${{ steps.create_table.outputs.table }}
