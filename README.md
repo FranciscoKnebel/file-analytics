@@ -62,12 +62,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-            ref: main
-            # git-restore-mtime-bare uses the ref log to find the correct timestamp
-            # for each file. This requires a full git history. The default value (1)
-            # creates a shallow checkout.
-            fetch-depth: 0
       
       - name: Restore timestamps
         uses: chetan/git-restore-mtime-action@v2
@@ -81,12 +75,8 @@ jobs:
       - name: Output Markdown to README file
         run: |
           echo "
-            ## Dawntech Assets
-
-            - 📁 Arquivos: ${{ steps.analytics_run.outputs.file_count }}
-            - ⚖️ Tamanho: ${{ steps.analytics_run.outputs.file_size }}
-              
-            ${{ steps.create_table.outputs.table }}
+            - 📁 Files: ${{ steps.analytics_run.outputs.file_count }}
+            - ⚖️ Size: ${{ steps.analytics_run.outputs.file_size }}
           " > README.md
       
       - uses: EndBug/add-and-commit@v9
